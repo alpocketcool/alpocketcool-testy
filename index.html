@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>CORE FIELD MEASUREMENTS v1.0</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #0b0f14;
+  color: #e6e6e6;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+}
+header {
+  background: #111827;
+  padding: 20px;
+  text-align: center;
+  border-bottom: 2px solid #22c55e;
+}
+h1 { color: #22c55e; }
+section {
+  padding: 20px;
+  border-bottom: 1px solid #222;
+}
+h2 { color: #60a5fa; }
+.warning { color: #f87171; }
+.ok { color: #34d399; }
+.code {
+  background: #111;
+  padding: 10px;
+  border-left: 3px solid #22c55e;
+  font-family: monospace;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>CORE FIELD MEASUREMENTS v1.0</h1>
+<p>Minimalny system wiedzy dla pomiarowca uziemień</p>
+</header>
+
+<section>
+<h2>1. CEL POMIARU</h2>
+<p>Pomiar rezystancji uziemienia NIE jest formalnością.</p>
+<p>To ocena czy prąd zwarciowy / piorun / przepięcie ma gdzie bezpiecznie odpłynąć.</p>
+
+<p class="warning">
+Jeśli nie rozumiesz po co mierzysz — wynik jest tylko liczbą, nie wiedzą.
+</p>
+</section>
+
+<section>
+<h2>2. PODSTAWOWY UKŁAD POMIAROWY</h2>
+
+<div class="code">
+Uziom (E) —— S —— H<br>
+0 m --------- 20–40 m --------- 40–80 m
+</div>
+
+<p>
+E = badany uziom (bednarka)<br>
+S = sonda napięciowa<br>
+H = sonda prądowa
+</p>
+
+<p class="ok">
+Zasada: H musi być na tyle daleko, żeby nie być w strefie wpływu uziomu.
+</p>
+</section>
+
+<section>
+<h2>3. PROCEDURA (BEZ SKRÓTÓW)</h2>
+
+<ol>
+<li>Odłącz uziom od instalacji (jeśli wymagane)</li>
+<li>Wbij sondy S i H w grunt</li>
+<li>Ustaw poprawne odległości (min. kilkanaście–kilkadziesiąt metrów)</li>
+<li>Podłącz miernik (np. Sonel)</li>
+<li>Wykonaj pomiar</li>
+<li>Przesuń sondę H i powtórz</li>
+</ol>
+
+<p class="warning">
+Jeśli nie sprawdzasz stabilności wyniku — nie masz pomiaru, masz losową liczbę.
+</p>
+</section>
+
+<section>
+<h2>4. KIEDY WYNIK JEST WIARYGODNY</h2>
+
+<ul>
+<li>Wynik nie zmienia się znacząco po przesunięciu H</li>
+<li>Różnice są małe i przewidywalne</li>
+<li>Pomiar wykonany w min. 2–3 kierunkach</li>
+</ul>
+
+<p class="ok">
+Stabilność > pojedynczy odczyt
+</p>
+</section>
+
+<section>
+<h2>5. CO ZNISZCZY POMIAR</h2>
+
+<ul>
+<li>Sucha gleba / piasek</li>
+<li>Kamienisty grunt</li>
+<li>Zbyt mała odległość sond H</li>
+<li>Brak stabilizacji odczytu</li>
+<li>Rurociągi / inne uziomy w pobliżu</li>
+</ul>
+</section>
+
+<section>
+<h2>6. TYPOWE BŁĘDY TERENOWE</h2>
+
+<p class="warning">
+„Podpiąłem miernik i mam wynik”
+</p>
+
+<p>
+To nie jest pomiar. To odczyt bez kontroli warunków.
+</p>
+
+<ul>
+<li>brak odłączenia uziomu</li>
+<li>jedna lokalizacja sond</li>
+<li>brak weryfikacji kierunkowej</li>
+<li>ignorowanie gruntu</li>
+</ul>
+</section>
+
+<section>
+<h2>7. INTERPRETACJA WYNIKÓW</h2>
+
+<ul>
+<li>Dom: ~10 Ω (typowo akceptowalne)</li>
+<li>Stacje: ~5 Ω</li>
+<li>Instalacje wyrównawcze: ~30 Ω (zależnie od projektu)</li>
+</ul>
+
+<p class="warning">
+Norma nie jest uniwersalna — zawsze zależy od systemu sieci i projektu.
+</p>
+</section>
+
+<section>
+<h2>8. ZASADA KOŃCOWA</h2>
+
+<p class="ok">
+Dobry pomiarowiec nie pokazuje liczby.<br>
+Dobry pomiarowiec potrafi powiedzieć, czy ta liczba jest prawdziwa.
+</p>
+</section>
+
+</body>
+</html>
