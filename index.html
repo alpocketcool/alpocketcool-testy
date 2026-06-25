@@ -2,159 +2,851 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<title>CORE FIELD MEASUREMENTS v1.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CORE FIELD ENGINE™ — Adaptacyjny silnik kompetencji pomiarowca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #0b0f14;
-  color: #e6e6e6;
-  line-height: 1.6;
-  margin: 0;
-  padding: 0;
-}
-header {
-  background: #111827;
-  padding: 20px;
-  text-align: center;
-  border-bottom: 2px solid #22c55e;
-}
-h1 { color: #22c55e; }
-section {
-  padding: 20px;
-  border-bottom: 1px solid #222;
-}
-h2 { color: #60a5fa; }
-.warning { color: #f87171; }
-.ok { color: #34d399; }
-.code {
-  background: #111;
-  padding: 10px;
-  border-left: 3px solid #22c55e;
-  font-family: monospace;
+:root{--bg:#0d1117;--bg2:#161b22;--bg3:#1c2432;--border:#30363d;--accent:#f0a500;--accent2:#e85d04;--text:#e6edf3;--text2:#8b949e;--text3:#6e7681;--green:#10b981;--blue:#3b82f6;--red:#ef4444;--yellow:#f59e0b;--r:8px;--rl:14px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;gap:14px;padding:14px 24px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.logo-mark{width:34px;height:34px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.logo-text{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--accent)}
+.logo-sub{font-size:10px;color:var(--text3);letter-spacing:.05em}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.progress-wrap{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)}
+.progress-bar{width:110px;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .4s}
+.diff-badge{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid}
+.d1{color:#6ee7b7;border-color:#6ee7b7}.d2{color:var(--blue);border-color:var(--blue)}.d3{color:var(--yellow);border-color:var(--yellow)}.d4{color:var(--red);border-color:var(--red)}
+
+/* MAIN */
+.main{max-width:800px;margin:0 auto;padding:32px 20px}
+.hidden{display:none!important}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeUp .3s ease}
+
+/* INTRO */
+.intro{text-align:center;padding:56px 16px}
+.intro-hero{font-family:'JetBrains Mono',monospace;font-size:clamp(26px,5vw,40px);font-weight:800;color:var(--accent);letter-spacing:-.02em;line-height:1.1;margin-bottom:10px}
+.intro-sub{font-size:15px;color:var(--text2);max-width:480px;margin:0 auto 12px}
+.intro-note{font-size:12px;color:var(--text3);margin-bottom:40px}
+.principle-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:40px;text-align:left}
+.pc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:18px}
+.pc-icon{font-size:22px;margin-bottom:8px}
+.pc-t{font-weight:600;font-size:13px;margin-bottom:4px}
+.pc-d{font-size:12px;color:var(--text2);line-height:1.5}
+.btn-start{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#000;font-weight:700;font-size:15px;padding:14px 36px;border-radius:var(--r);border:none;cursor:pointer;letter-spacing:.03em;transition:opacity .15s,transform .1s}
+.btn-start:hover{opacity:.9;transform:translateY(-1px)}
+
+/* TICKER */
+.ticker{display:flex;gap:12px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px}
+.tick{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px 16px;font-size:12px;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0}
+.tick-val{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--accent)}
+.tick-lbl{color:var(--text3);font-size:10px;letter-spacing:.05em}
+
+/* QUESTION */
+.q-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:26px;margin-bottom:16px;animation:fadeUp .3s ease}
+.q-meta{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.q-cat{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.q-id{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3)}
+.q-scenario{font-size:16px;font-weight:500;color:var(--text);line-height:1.65;margin-bottom:22px;padding:16px;background:var(--bg3);border-left:3px solid var(--accent);border-radius:0 var(--r) var(--r) 0}
+
+/* OPTIONS */
+.opts{display:flex;flex-direction:column;gap:10px;margin-bottom:22px}
+.opt{width:100%;text-align:left;padding:13px 17px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text);font-size:14px;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:12px;font-family:inherit}
+.opt:hover:not(:disabled){border-color:var(--accent);background:rgba(240,165,0,.06)}
+.opt-letter{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text3);margin-top:1px;flex-shrink:0;width:16px}
+.opt.correct{border-color:var(--green);background:rgba(16,185,129,.1);color:var(--green)}
+.opt.wrong{border-color:var(--red);background:rgba(239,68,68,.08);opacity:.7}
+.opt.sel-wrong{border-color:var(--red);background:rgba(239,68,68,.12)}
+.opt:disabled{cursor:default}
+
+/* CONFIDENCE */
+.conf-wrap{margin-bottom:20px}
+.conf-label{font-size:12px;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.conf-label::before{content:'';display:block;width:3px;height:12px;background:var(--accent);border-radius:2px}
+.conf-opts{display:flex;gap:8px}
+.conf-btn{flex:1;padding:10px 8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);color:var(--text2);font-size:12px;cursor:pointer;text-align:center;transition:all .15s;font-family:inherit;line-height:1.4}
+.conf-btn:hover{border-color:var(--text3);color:var(--text)}
+.conf-btn.a0{border-color:var(--red);color:var(--red);background:rgba(239,68,68,.1)}
+.conf-btn.a1{border-color:var(--yellow);color:var(--yellow);background:rgba(245,158,11,.1)}
+.conf-btn.a2{border-color:var(--green);color:var(--green);background:rgba(16,185,129,.1)}
+
+/* SUBMIT */
+.btn-submit{width:100%;padding:13px;background:var(--accent);color:#000;font-weight:700;font-size:14px;border:none;border-radius:var(--r);cursor:pointer;transition:opacity .15s;letter-spacing:.03em;font-family:inherit}
+.btn-submit:hover{opacity:.9}
+.btn-submit:disabled{opacity:.3;cursor:default}
+
+/* EXPLANATION */
+.expl{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:20px;margin-top:14px;animation:fadeUp .3s ease}
+.expl-hdr{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-weight:600;font-size:13px}
+.ok{color:var(--green)}.nok{color:var(--red)}
+.expl-txt{font-size:14px;color:var(--text2);line-height:1.75}
+.btn-next{margin-top:14px;width:100%;padding:11px;background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:var(--r);font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit}
+.btn-next:hover{background:rgba(240,165,0,.08)}
+
+/* GAP ALERT */
+.gap-alert{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:var(--r);margin-bottom:14px;font-size:13px;color:var(--text2);animation:fadeUp .3s ease}
+.gap-alert strong{color:var(--red)}
+
+/* RESULTS */
+.res-header{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:26px;margin-bottom:20px}
+.res-badge{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.res-icon{font-size:42px;flex-shrink:0}
+.res-level{font-size:20px;font-weight:700}
+.res-score{font-size:14px;color:var(--text2);margin-top:4px}
+.res-meta{display:flex;gap:18px;font-size:13px;color:var(--text2);flex-wrap:wrap}
+.section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:22px;margin-bottom:18px}
+.sec-title{font-size:12px;font-weight:700;color:var(--text);letter-spacing:.1em;text-transform:uppercase;margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+
+/* COMP BARS */
+.comp-grid{display:flex;flex-direction:column;gap:14px;margin-bottom:20px}
+.comp-row{}
+.comp-top{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.comp-name{font-size:13px;font-weight:500}
+.cal-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
+.cal-good{background:rgba(16,185,129,.15);color:var(--green)}
+.cal-warning{background:rgba(245,158,11,.15);color:var(--yellow)}
+.cal-danger{background:rgba(239,68,68,.15);color:var(--red)}
+.comp-track{position:relative;height:10px;background:var(--bg3);border-radius:5px;margin-bottom:4px}
+.comp-fill{height:100%;border-radius:5px;transition:width .9s ease}
+.comp-pct{position:absolute;right:-38px;top:-3px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text2)}
+.comp-detail{font-size:11px;color:var(--text3)}
+
+/* RADAR */
+.radar-wrap{display:flex;justify-content:center;margin-top:16px}
+.radar-svg{width:240px;height:240px}
+.r-grid{fill:none;stroke:var(--border);stroke-width:1}
+.r-axis{stroke:var(--border);stroke-width:1}
+.r-data{fill:rgba(240,165,0,.15);stroke:var(--accent);stroke-width:2}
+.r-dot{fill:var(--accent)}
+.r-label{font-size:9px;fill:var(--text2)}
+
+/* GAPS */
+.gap-sec{}
+.gap-item{padding:11px 15px;border-radius:var(--r);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;font-size:13px;flex-wrap:wrap;gap:6px}
+.gap-overconfident{background:rgba(239,68,68,.09);border-left:3px solid var(--red)}
+.gap-repeated_error{background:rgba(245,158,11,.09);border-left:3px solid var(--yellow)}
+.gap-when{font-size:11px;color:var(--text3)}
+.biggest-gap{margin-top:14px;padding:14px 18px;background:var(--bg3);border-radius:var(--r);display:flex;align-items:center;gap:10px;font-size:14px;flex-wrap:wrap}
+.gap-label-t{color:var(--text2);font-size:12px}
+.gap-score-t{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--red);font-weight:700}
+
+/* PLAN */
+.plan-card{border-radius:var(--r);padding:16px;margin-bottom:10px;border-left:3px solid}
+.plan-urgent{border-color:var(--red);background:rgba(239,68,68,.05)}
+.plan-confidence{border-color:var(--yellow);background:rgba(245,158,11,.05)}
+.plan-improve{border-color:var(--blue);background:rgba(59,130,246,.05)}
+.plan-excellence{border-color:var(--green);background:rgba(16,185,129,.05)}
+.plan-hdr{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.plan-pri{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);background:var(--bg3);padding:2px 8px;border-radius:10px}
+.plan-title{font-size:14px;font-weight:600}
+.plan-desc{font-size:13px;color:var(--text2);margin-bottom:8px;line-height:1.6}
+.plan-action{font-size:12px;color:var(--text);font-style:italic;line-height:1.5}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:10px}
+.stat-box{background:var(--bg3);border-radius:var(--r);padding:14px;text-align:center}
+.stat-num{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--accent)}
+.stat-lbl{font-size:11px;color:var(--text3);margin-top:3px;letter-spacing:.04em}
+
+/* RESTART */
+.btn-restart{display:inline-flex;align-items:center;gap:8px;margin-top:22px;padding:11px 26px;border:1px solid var(--border);background:transparent;color:var(--text2);border-radius:var(--r);font-size:13px;cursor:pointer;transition:all .15s;font-family:inherit}
+.btn-restart:hover{border-color:var(--accent);color:var(--accent)}
+
+/* SCENARIO */
+.sc-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:26px;animation:fadeUp .3s ease;margin-bottom:16px}
+.sc-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent2);margin-bottom:8px}
+.sc-title{font-size:18px;font-weight:700;margin-bottom:12px}
+.sc-context{font-size:13px;color:var(--text2);margin-bottom:18px;line-height:1.6;padding:12px;background:var(--bg3);border-radius:var(--r)}
+.sc-desc{font-size:15px;line-height:1.7;margin-bottom:18px}
+.dp-list h3{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:10px}
+.dp{padding:9px 13px;border-left:2px solid var(--accent2);margin-bottom:7px;font-size:14px;color:var(--text2)}
+.key-insight{margin-top:18px;padding:14px;background:rgba(240,165,0,.06);border:1px solid rgba(240,165,0,.2);border-radius:var(--r);font-size:13px;line-height:1.7}
+.key-insight strong{color:var(--accent);display:block;margin-bottom:5px;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.btn-sc-next{margin-top:16px;width:100%;padding:11px;background:transparent;border:1px solid var(--border);color:var(--text2);border-radius:var(--r);font-size:14px;cursor:pointer;transition:all .15s;font-family:inherit}
+.btn-sc-next:hover{border-color:var(--accent);color:var(--accent)}
+.btn-sc-finish{margin-top:8px;width:100%;padding:11px;background:var(--accent);color:#000;border:none;border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+
+@media(max-width:600px){
+  .main{padding:18px 12px}
+  .topbar{padding:10px 14px}
+  .q-card,.sc-card{padding:18px}
+  .conf-opts{flex-direction:column}
+  .logo-sub{display:none}
 }
 </style>
 </head>
-
 <body>
 
-<header>
-<h1>CORE FIELD MEASUREMENTS v1.0</h1>
-<p>Minimalny system wiedzy dla pomiarowca uziemień</p>
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="logo-mark">⚡</div>
+  <div>
+    <div class="logo-text">CORE FIELD ENGINE™</div>
+    <div class="logo-sub">Adaptacyjny silnik kompetencji pomiarowca</div>
+  </div>
+  <div class="topbar-right" id="topbarRight" style="display:none">
+    <div class="progress-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <span id="progressLabel">0/20</span>
+    </div>
+    <div class="diff-badge d1" id="diffBadge">LVL 1</div>
+  </div>
 </header>
 
-<section>
-<h2>1. CEL POMIARU</h2>
-<p>Pomiar rezystancji uziemienia NIE jest formalnością.</p>
-<p>To ocena czy prąd zwarciowy / piorun / przepięcie ma gdzie bezpiecznie odpłynąć.</p>
+<main class="main">
 
-<p class="warning">
-Jeśli nie rozumiesz po co mierzysz — wynik jest tylko liczbą, nie wiedzą.
-</p>
-</section>
+  <!-- ── INTRO ─────────────────────────────────────────────────────── -->
+  <div id="screenIntro" class="intro fade-in">
+    <div class="intro-hero">CORE FIELD ENGINE™</div>
+    <div class="intro-sub">Nie oceniamy pamięci. Oceniamy zdolność podjęcia poprawnej decyzji terenowej.</div>
+    <div class="intro-note">20 pytań adaptacyjnych · wykrywanie luk kompetencyjnych · mapa mocnych stron</div>
 
-<section>
-<h2>2. PODSTAWOWY UKŁAD POMIAROWY</h2>
+    <div class="principle-grid">
+      <div class="pc"><div class="pc-icon">🎯</div><div class="pc-t">Scenariusze terenowe</div><div class="pc-d">Rzeczywiste sytuacje z placu budowy, nie definicje z podręcznika</div></div>
+      <div class="pc"><div class="pc-icon">🔄</div><div class="pc-t">Silnik adaptacyjny</div><div class="pc-d">Poziom trudności dostosowuje się do Twoich odpowiedzi w czasie rzeczywistym</div></div>
+      <div class="pc"><div class="pc-icon">🧠</div><div class="pc-t">Pewność siebie</div><div class="pc-d">Wykrywamy rozjazd między tym co wiesz, a tym jak pewnie odpowiadasz</div></div>
+      <div class="pc"><div class="pc-icon">📊</div><div class="pc-t">Mapa kompetencji</div><div class="pc-d">Konkretne luki, nie tylko punkty. Wiesz dokładnie co ćwiczyć</div></div>
+    </div>
 
-<div class="code">
-Uziom (E) —— S —— H<br>
-0 m --------- 20–40 m --------- 40–80 m
-</div>
+    <button class="btn-start" onclick="App.start()">⚡ Rozpocznij ocenę kompetencji</button>
+  </div>
 
-<p>
-E = badany uziom (bednarka)<br>
-S = sonda napięciowa<br>
-H = sonda prądowa
-</p>
+  <!-- ── QUIZ ──────────────────────────────────────────────────────── -->
+  <div id="screenQuiz" class="hidden">
+    <!-- Live ticker -->
+    <div class="ticker">
+      <div class="tick"><div class="tick-val" id="tCorrect">0</div><div class="tick-lbl">POPRAWNYCH</div></div>
+      <div class="tick"><div class="tick-val" id="tTotal">0</div><div class="tick-lbl">PYTAŃ</div></div>
+      <div class="tick"><div class="tick-val" id="tAccuracy">—</div><div class="tick-lbl">SKUTECZNOŚĆ</div></div>
+      <div class="tick"><div class="tick-val" id="tGaps">0</div><div class="tick-lbl">LUK</div></div>
+    </div>
 
-<p class="ok">
-Zasada: H musi być na tyle daleko, żeby nie być w strefie wpływu uziomu.
-</p>
-</section>
+    <!-- Gap alert (shown when gap detected) -->
+    <div id="gapAlert" class="gap-alert hidden">
+      <span>⚠️</span>
+      <div><strong>Wykryto lukę kompetencyjną:</strong> <span id="gapAlertMsg"></span></div>
+    </div>
 
-<section>
-<h2>3. PROCEDURA (BEZ SKRÓTÓW)</h2>
+    <!-- Question -->
+    <div id="questionWrap"></div>
+  </div>
 
-<ol>
-<li>Odłącz uziom od instalacji (jeśli wymagane)</li>
-<li>Wbij sondy S i H w grunt</li>
-<li>Ustaw poprawne odległości (min. kilkanaście–kilkadziesiąt metrów)</li>
-<li>Podłącz miernik (np. Sonel)</li>
-<li>Wykonaj pomiar</li>
-<li>Przesuń sondę H i powtórz</li>
-</ol>
+  <!-- ── SCENARIOS ─────────────────────────────────────────────────── -->
+  <div id="screenScenarios" class="hidden">
+    <div class="ticker">
+      <div class="tick"><div class="tick-val" style="color:var(--accent2)">SCENARIUSZ</div><div class="tick-lbl">TERENOWY</div></div>
+      <div class="tick"><div class="tick-val" id="scIdx">1</div><div class="tick-lbl">Z 3</div></div>
+    </div>
+    <div id="scenarioWrap"></div>
+  </div>
 
-<p class="warning">
-Jeśli nie sprawdzasz stabilności wyniku — nie masz pomiaru, masz losową liczbę.
-</p>
-</section>
+  <!-- ── RESULTS ───────────────────────────────────────────────────── -->
+  <div id="screenResults" class="hidden">
+    <div id="resultsContent" class="fade-in"></div>
+    <div style="text-align:center">
+      <button class="btn-restart" onclick="App.restart()">↺ Zacznij od nowa</button>
+    </div>
+  </div>
 
-<section>
-<h2>4. KIEDY WYNIK JEST WIARYGODNY</h2>
+</main>
 
-<ul>
-<li>Wynik nie zmienia się znacząco po przesunięciu H</li>
-<li>Różnice są małe i przewidywalne</li>
-<li>Pomiar wykonany w min. 2–3 kierunkach</li>
-</ul>
+<script>
+// ════════════════════════════════════════════════════════════════════
+// DATA — 50 PYTAŃ + 25 SCENARIUSZY
+// ════════════════════════════════════════════════════════════════════
+const QUESTIONS = [
+  {id:"UZ001",cat:"uziemienia",diff:1,scenario:"Mierzysz rezystancję uziemienia przy budynku mieszkalnym. Przyrząd pokazuje 8,2 Ω. Norma wymaga ≤10 Ω. Co wpisujesz w protokole?",opts:["Wynik pozytywny – spełnia normę","Wynik negatywny – 8,2 Ω to za blisko granicy","Wynik pozytywny, ale zalecam poprawę","Nie wpisuję nic – to nie mój problem"],ans:0,exp:"8,2 Ω spełnia wymaganie ≤10 Ω. Wynik jest pozytywny. Nie dodajemy subiektywnych zaleceń gdy norma jest spełniona. Protokół opisuje stan faktyczny, nie obawy pomiarowca.",nc:"UZ003",nw:"UZ002"},
+  {id:"UZ002",cat:"uziemienia",diff:1,scenario:"Jaka jest maksymalna rezystancja uziemienia dla instalacji TN-C-S w budynku mieszkalnym według normy PN-HD 60364?",opts:["10 Ω","30 Ω","100 Ω","Norma nie określa wartości granicznej"],ans:0,exp:"Norma PN-HD 60364-5-54 wymaga R ≤ 10 Ω dla typowych instalacji TN. To punkt wyjścia do oceny każdego pomiaru uziemienia.",nc:"UZ001",nw:"UZ001"},
+  {id:"UZ003",cat:"uziemienia",diff:2,scenario:"Mierzysz uziemienie metodą 3-elektrodową. Wyniki w trzech położeniach sondy: 4,1 Ω / 4,3 Ω / 4,8 Ω. Rozrzut wynosi 0,7 Ω. Co to oznacza?",opts:["Pomiar jest niewiarygodny – za duży rozrzut","Pomiar jest prawidłowy – rozrzut akceptowalny","Trzeba powtórzyć z innym przyrządem","Przyjmuję najgorszy wynik: 4,8 Ω"],ans:1,exp:"Rozrzut <10% wartości średniej jest akceptowalny. Tu: średnia ≈ 4,4 Ω, rozrzut 0,7 Ω = ok. 16% – to wymaga uwagi. Sprawdzamy czy sonda nie leży w strefie oddziaływania. Sam fakt rozrzutu nie dyskwalifikuje pomiaru automatycznie.",nc:"UZ005",nw:"UZ004"},
+  {id:"UZ004",cat:"uziemienia",diff:1,scenario:"Dlaczego przy metodzie 3-elektrodowej sondę prądową ustawiamy w odległości min. 20m od elektrody badanej?",opts:["Żeby nie uszkodzić elektrody badanej","Żeby strefy oddziaływania elektrod nie nakładały się","To wymóg formalny bez uzasadnienia","Żeby zmniejszyć rezystancję kontaktu sondy"],ans:1,exp:"Każda elektroda ma strefę oddziaływania w gruncie. Przy zbyt małej odległości strefy nakładają się i wynik jest fałszowany. 20m to minimum zapewniające niezależność stref.",nc:"UZ003",nw:"UZ002"},
+  {id:"UZ005",cat:"uziemienia",diff:3,scenario:"Uziemienie fundamentowe mierzy 0,8 Ω. Klient pyta: 'Super, im mniej tym lepiej?' Jak odpowiadasz?",opts:["Tak, im mniej tym lepiej – gratulacje","Nie zawsze. Bardzo niska rezystancja może wskazywać niezamierzony kontakt z rurami – trzeba sprawdzić","Nie mój problem – wpisałem co zmierzyłem","To bez znaczenia dla instalacji"],ans:1,exp:"Paradoksalnie bardzo niski wynik może wskazywać że elektroda ma niezamierzony kontakt z rurami metalowymi lub konstrukcją stalową. Może stwarzać zagrożenie (prądy błądzące, korozja). Dobry pomiarowiec pyta dlaczego, nie tylko co.",nc:"UZ006",nw:"UZ004"},
+  {id:"UZ006",cat:"uziemienia",diff:3,scenario:"Zimą gleba zamarznięta do 60cm. Elektroda pozioma na głębokości 50cm. Wynik: 3,2 Ω. Latem wynosił 12 Ω. Co wpisujesz?",opts:["3,2 Ω – pozytywny. Nic więcej.","Odmawiam pomiaru – warunki niedopuszczalne","3,2 Ω z adnotacją o warunkach. Wynik letni 12 Ω przekracza normę – rekomendacja: wymiana elektrody","Przyjmuję średnią: 7,6 Ω – pozytywny"],ans:2,exp:"Miarodajny jest wynik w najgorszych warunkach (najwyższa rezystywność gruntu). Protokół MUSI zawierać warunki pomiaru. Wynik letni 12 Ω przekracza normę – to jest prawdziwy problem instalacji.",nc:"PZ001",nw:"UZ005"},
+  {id:"UZ007",cat:"uziemienia",diff:2,scenario:"Elektroda stalowa ocynkowana fi18mm, 1,5m, gleba: piasek suchy. Wynik: 45 Ω. Norma ≤10 Ω. Co rekomendujemy?",opts:["Wymiana na lepszy przyrząd","Pogłębienie elektrody, elektrody równoległe, lub środki obniżające rezystywność gruntu","To norma – piasek tak ma","Zmiana lokalizacji budynku"],ans:1,exp:"Piasek suchy to rezystywność 1000-5000 Ωm – bardzo wysoka. Rozwiązania: głębsza elektroda, elektrody równoległe, uziom poziomy, bentonit. Protokół zawiera wynik + rekomendację techniczną.",nc:"UZ005",nw:"UZ004"},
+  {id:"UZ008",cat:"uziemienia",diff:3,scenario:"Szpital – system IT medyczny. Uziemienie 2,8 Ω – wynik OK. Ale pielęgniarka mówi że pacjenci czują mrowienie przy łóżku. Co robisz?",opts:["Nic – uziemienie w normie","Mrowienie = napięcie dotykowe. To może być prąd mikroporażeniowy. Wykracza poza standardowy pomiar – kieruję do specjalisty instalacji medycznych","Mierzę Ri łóżka","To problem personelu – mylą mrowienie z innymi objawami"],ans:1,exp:"System IT medyczny to oddzielna norma PN-HD 60364-7-710. Mrowienie pacjentów = napięcie dotykowe śmiertelne dla pacjenta podłączonego do sprzętu (próg 10μA!). Granica kompetencji = granica odpowiedzialności.",nc:"KK003",nw:"KK002"},
+  {id:"UZ009",cat:"uziemienia",diff:2,scenario:"Klient pyta: czy zamiast elektrody można podłączyć do metalowej rury wodociągowej? Twoja odpowiedź?",opts:["Tak – rura metalowa to świetne uziemienie","Nie. Rury mogą mieć plastikowe odcinki przerywające ciągłość. Jako uzupełniające wyrównawcze tak, jako główna elektroda – nie","Tak, ale tylko rury żeliwne","Nie wiem – zapytaj hydraulika"],ans:1,exp:"Norma PN-HD 60364-5-54 zabrania rur wodociągowych jako jedynej elektrody (powód: plastikowe złączki, wodomierze). Korozja elektrolityczna to dodatkowy problem.",nc:"UZ007",nw:"UZ004"},
+  {id:"PZ001",cat:"petla_zwarcia",diff:1,scenario:"Przyrząd pokazuje Zs = 0,38 Ω. Bezpiecznik topikowy B16A. Czy ochrona przed porażeniem jest skuteczna?",opts:["Tak – im mniejsza impedancja, tym lepiej","Muszę obliczyć prąd zwarcia i porównać z wartością wyzwalającą","Nie – 0,38 Ω to za dużo","Nie wiem – trzeba zapytać elektryka"],ans:1,exp:"Sam wynik Zs nic nie mówi bez kontekstu. Obliczamy Ik = 230/0,38 = 605 A. Dla B16: 5×In = 80 A. 605 A >> 80 A → ochrona SKUTECZNA. Pomiarowiec oblicza i interpretuje, nie tylko mierzy.",nc:"PZ003",nw:"PZ002"},
+  {id:"PZ002",cat:"petla_zwarcia",diff:1,scenario:"Co oznacza Zs w pomiarze pętli zwarcia?",opts:["Rezystancja uziemienia","Impedancja pętli zwarcia fazowego – suma impedancji: transformatora, kabli, przewodu PE","Rezystancja izolacji przewodu fazowego","Impedancja mierzona tylko w obwodzie PE"],ans:1,exp:"Zs to całkowita impedancja pętli: od źródła, przez fazę, przez punkt zwarcia, z powrotem przez PE/PEN. Ona determinuje prąd zwarcia przy uszkodzeniu izolacji.",nc:"PZ001",nw:"PZ001"},
+  {id:"PZ003",cat:"petla_zwarcia",diff:2,scenario:"Zs = 1,82 Ω. Wyłącznik B10A. Sieć TN-C-S, U0 = 230V. Oceń ochronę.",opts:["Pozytywna – wynik poniżej 2 Ω","Negatywna – prąd zwarcia niewystarczający do zadziałania w czasie 0,4s","Pozytywna – B10 to mały bezpiecznik","Nie można ocenić bez oscyloskopu"],ans:1,exp:"Ik = 230/1,82 = 126 A. Dla B10: 5×In = 50 A. 126A/50A = 2,5× – to może nie wyzwolić w 0,4s (wymagane min. ~80-100A dla pewnego wyzwolenia B10). Granicznie – wymaga weryfikacji z charakterystyką wyłącznika.",nc:"PZ005",nw:"PZ004"},
+  {id:"PZ004",cat:"petla_zwarcia",diff:1,scenario:"Jaki czas zadziałania zabezpieczenia przyjmujemy jako kryterium dla obwodów 230V w instalacji TN?",opts:["1 sekunda","0,4 sekundy","0,1 sekundy","5 sekund"],ans:1,exp:"Norma PN-HD 60364-4-41 wymaga wyzwolenia ≤0,4s dla obwodów końcowych 230V w TN. To czas w którym napięcie dotykowe nie powoduje migotania komór serca.",nc:"PZ003",nw:"PZ003"},
+  {id:"PZ005",cat:"petla_zwarcia",diff:3,scenario:"Klient wymienił przewody w garażu na cieńsze (1,5mm² zamiast 2,5mm²). Zs wzrosło z 0,45 Ω do 1,1 Ω. Zabezpieczenie B16A. Co mu mówisz i co wpisujesz?",opts:["Nic – 1,1 Ω to nadal OK dla B16","Informuję klienta o nieprawidłowości. Ik=209A wystarczy dla B16, ale przekrój 1,5mm² nie odpowiada zabezpieczeniu B16","Wpisuję tylko wynik pomiaru","Każę klientowi natychmiast wymienić kable"],ans:1,exp:"Ik=230/1,1=209A >> 80A (5×16) – ochrona elektrycznie skuteczna. Ale 1,5mm² przy B16A narusza wymagania obciążalności (max B10 dla 1,5mm²). Protokół: wynik + niezgodność. Pomiarowiec dokumentuje i informuje.",nc:"RI001",nw:"PZ004"},
+  {id:"PZ006",cat:"petla_zwarcia",diff:2,scenario:"Przyrząd pokazuje błąd 'L-PE reversed'. Co to znaczy i jak reagujesz?",opts:["Przyrząd jest uszkodzony – wymieniam","Faza i PE są zamienione – to poważna niezgodność wymagająca natychmiastowej naprawy przed dalszymi pomiarami","To normalne w starych instalacjach","Ignoruję błąd i mierzę dalej"],ans:1,exp:"L-PE reversed = PE jest pod napięciem, L uziemiona. To ekstremalne zagrożenie – obudowy urządzeń są pod 230V. Nie kontynuujesz. Odłączasz napięcie. Informujesz klienta. Dokumenujesz jako 'wynik negatywny – zagrożenie życia'.",nc:"PZ003",nw:"PZ004"},
+  {id:"PZ007",cat:"petla_zwarcia",diff:3,scenario:"Instalacja 3-fazowa. Zs: L1=0,38Ω, L2=0,41Ω, L3=0,95Ω. Zabezpieczenia identyczne B25. Co interpretujesz?",opts:["Wszystkie fazy OK – poniżej 1Ω","L3 ma 2× wyższą impedancję – sygnał uszkodzenia: luźne połączenie, korozja styku. Wymaga diagnostyki","To normalne rozrzuty w instalacji 3-fazowej","Wpisuję wyniki bez komentarza"],ans:1,exp:"Asymetria wskazuje na problem fizyczny: luźne złącze, korozja zacisku, uszkodzone połączenie na L3. Elektrycznie może być OK, ale wzorzec wyników to sygnał. Dobry pomiarowiec nie tylko sprawdza kryterium – analizuje wzorce.",nc:"INT003",nw:"PZ004"},
+  {id:"PZ008",cat:"petla_zwarcia",diff:2,scenario:"Instalacja TT (nie TN). Uziemienie odbiornika 8 Ω. Zabezpieczenie B16A. Czy ochrona jest skuteczna?",opts:["Tak – takie same kryteria jak TN","W TT ochrona opiera się na RCD, nie na impedancji pętli. Weryfikuję obecność i parametry RCD","Nie – 8 Ω to za dużo","TT nie wymaga pomiaru Zs"],ans:1,exp:"W instalacji TT uziemienia odbiorcy i źródła są niezależne. Prąd zwarcia przez ziemię jest za mały żeby wyzwolić bezpiecznik w dopuszczalnym czasie. Ochrona realizowana wyłącznie przez RCD.",nc:"RCD006",nw:"PZ004"},
+  {id:"RI001",cat:"rezystancja_izolacji",diff:1,scenario:"Mierzysz Ri kabla 230V napięciem 500V DC. Wynik: 45 MΩ. Norma wymaga min. 1 MΩ. Co wpisujesz?",opts:["Wynik pozytywny – 45 MΩ >> 1 MΩ","Wynik wątpliwy – za duży rozrzut od normy","Wynik negatywny – 500V to za wysokie","Wynik negatywny – nowy kabel powinien mieć 100 MΩ"],ans:0,exp:"45 MΩ spełnia wymaganie min. 1 MΩ z bardzo dużym zapasem. To typowa wartość dobrego kabla. Wynik pozytywny. Nie porównujemy do wymyślonych wartości idealnych.",nc:"RI003",nw:"RI002"},
+  {id:"RI002",cat:"rezystancja_izolacji",diff:1,scenario:"Dlaczego przed pomiarem Ri należy odłączyć wszystkie urządzenia od obwodu?",opts:["Żeby nie uszkodzić miernika","Urządzenia mają własne rezystancje wewnętrzne zafałszowujące wynik pomiaru izolacji kabla","To wymóg formalny","Żeby wyłączyć napięcie robocze"],ans:1,exp:"Elektronika, kondensatory, filtry EMC – wszystkie mają ścieżki rezystancyjne do PE lub między fazami. Mierzysz wtedy sumę: izolacja + urządzenie. Klasyczne źródło fałszywych wyników negatywnych.",nc:"RI001",nw:"RI001"},
+  {id:"RI003",cat:"rezystancja_izolacji",diff:2,scenario:"Ri nowego kabla w nowej instalacji: 0,8 MΩ. Norma: min. 1 MΩ. Klient mówi 'to prawie 1 MΩ, wystarczy'. Jak reagujesz?",opts:["Klient ma rację – różnica minimalna","Wpisuję wynik negatywny. 0,8 MΩ < 1 MΩ. Nowa instalacja z wynikiem bliskim granicy to sygnał alarmowy","Zmierzę raz jeszcze – pewnie błąd przyrządu","Wpisuję pozytywny z adnotacją o niskiej wartości"],ans:1,exp:"Norma to norma. 0,8 MΩ < 1 MΩ = wynik negatywny, bez wyjątków. Nowa instalacja blisko granicy to poważny sygnał – uszkodzona izolacja podczas układania, zawilgocenie, błąd montażu. Pomiarowiec nie negocjuje wyników z klientem.",nc:"RI005",nw:"RI004"},
+  {id:"RI004",cat:"rezystancja_izolacji",diff:1,scenario:"Jakim napięciem DC mierzymy Ri instalacji 230V?",opts:["230V DC","500V DC","1000V DC","110V DC"],ans:1,exp:"Dla instalacji niskiego napięcia 230/400V stosujemy 500V DC. Reguła: napięcie pomiarowe ≈ 2× napięcie nominalne. 1000V DC stosuje się dla instalacji 1kV i wyższych.",nc:"RI003",nw:"RI003"},
+  {id:"RI005",cat:"rezystancja_izolacji",diff:3,scenario:"Ri kabla w starym warsztacie: po 1 min = 2,3 MΩ (OK). Po 1 min spada do 1,1 MΩ. Po 5 min: 0,9 MΩ. Co oznacza ten trend?",opts:["Przyrząd się rozgrzewa – normalne","Izolacja jest zawilgocona – napięcie DC polaryzuje wilgoć, co zwiększa upływ prądu","Kabel zbyt długi – oporność naturalnie spada","Wynik początkowy 2,3 MΩ jest wiarygodny – to wpisuję"],ans:1,exp:"Spadający wynik w czasie to klasyczny objaw zawilgocenia lub uszkodzenia izolacji. Sucha, dobra izolacja ma stabilny lub rosnący wynik (polaryzacja dielektryczna). Trend spadkowy = zła izolacja nawet jeśli wynik początkowy spełniał normę. Wpisujesz trend i wynik końcowy.",nc:"RCD001",nw:"RI004"},
+  {id:"RI006",cat:"rezystancja_izolacji",diff:2,scenario:"Mierzysz Ri: wszystkie >100 MΩ poza N-PE = 0,8 MΩ. Co to oznacza?",opts:["Wynik pozytywny – N-PE blisko normy","Uszkodzona izolacja między N a PE. Może powodować prądy wyrównawcze, fałszywe wyzwolenia RCD. Wynik negatywny","N i PE powinny mieć niską rezystancję między sobą","N-PE nie jest mierzone w standardowym protokole"],ans:1,exp:"N i PE to oddzielne przewody w TN-S i powinny być oddzielone. Niska rezystancja między nimi: błędne połączenie, uszkodzona izolacja, niezamierzone mostowanie. To zaburza działanie RCD i może stwarzać zagrożenie.",nc:"RCD003",nw:"RI004"},
+  {id:"RI007",cat:"rezystancja_izolacji",diff:3,scenario:"Mierzysz Ri maszyny przemysłowej. Urządzenie odłączone, ale Ri = 0,05 MΩ. Filtr EMC na wejściu. Dlaczego i co robisz?",opts:["Wynik negatywny – uszkodzona izolacja","Filtr EMC zawiera kondensatory Y podłączone faza-PE. Rozładowuję kondensatory, powtarzam pomiar","Wpisuję wynik i informuję o uszkodzeniu","Podwyższam napięcie pomiarowe do 1000V"],ans:1,exp:"Filtry EMC (klasy B) zawierają kondensatory Y (faza-PE, N-PE) o pojemności dziesiątek nF. Przy 500V DC dają pozornie niską rezystancję. Rozładuj, odłącz filtr jeśli możliwe, powtórz. Klasyczna pułapka przy pomiarach w automatyce.",nc:"INT003",nw:"RI004"},
+  {id:"RCD001",cat:"rcd",diff:1,scenario:"RCD 30mA nie wyzwala podczas testu przyciskiem TEST. Co robisz?",opts:["Wpisuję pozytywny – może przycisk zepsuty","Sprawdzam napięcie zasilania, mierzę czas i prąd wyzwolenia przyrządem pomiarowym","Wymieniam RCD od razu","Informuję klienta że RCD sprawny – TEST to tylko test mechaniczny"],ans:1,exp:"Przycisk TEST testuje tylko mechanizm – nie parametry elektryczne RCD. Brak wyzwolenia przez TEST może oznaczać brak napięcia lub uszkodzenie mechanizmu. Musisz zmierzyć prądem pomiarowym. Dopiero wynik pomiaru decyduje.",nc:"RCD003",nw:"RCD002"},
+  {id:"RCD002",cat:"rcd",diff:1,scenario:"Co mierzy przycisk TEST na obudowie RCD?",opts:["Prąd różnicowy wyzwalający","Czas wyzwolenia","Sprawność mechanizmu wyzwalacza – nie parametry elektryczne","Rezystancję uzwojenia transformatora"],ans:2,exp:"Przycisk TEST symuluje przepływ prądu przez rezystor wewnętrzny, omijając transformator różnicowy. To test mechaniczny – czy wyłącznik się odpina. Nie mówi nic o progu prądu wyzwolenia ani czasie działania.",nc:"RCD001",nw:"RCD001"},
+  {id:"RCD003",cat:"rcd",diff:2,scenario:"RCD 30mA. Czas wyzwolenia przy 30mA: 280ms. Norma: max 300ms. Klient pyta czy OK. Co mówisz?",opts:["Tak – 280ms < 300ms, spełnia normę","Tak, ale jest blisko granicy. Przy następnym przeglądzie należy sprawdzić – RCD może się starzeć","Nie – za mała różnica, trzeba wymienić","Nie wiem – sprawdzę u producenta"],ans:1,exp:"Technicznie 280ms spełnia normę. Ale dobry pomiarowiec czyta trend: nowy RCD powinien działać w 20-50ms. 280ms to sygnał starzenia. Wpisujesz wynik pozytywny, ale dodajesz obserwację. To jest wartość dodana twojej pracy.",nc:"RCD005",nw:"RCD004"},
+  {id:"RCD004",cat:"rcd",diff:1,scenario:"Jaka jest maksymalna wartość prądu wyzwolenia dla RCD 30mA?",opts:["30mA","15mA","50mA","100mA"],ans:0,exp:"RCD musi wyzwolić przy prądzie ≤ wartości nominalnej (IΔn = 30mA). Nie wyzwala przy 15mA (0,5×IΔn) – zapobiega fałszywym wyzwoleniom. Pomiar: 0,5×IΔn, 1×IΔn i 5×IΔn.",nc:"RCD003",nw:"RCD003"},
+  {id:"RCD005",cat:"rcd",diff:3,scenario:"RCD 30mA wyzwala przy 28mA w 45ms. Ale klient zgłasza że RCD wyzwala samoistnie co kilka dni. Twoja diagnoza?",opts:["RCD uszkodzony – wymiana","RCD działa poprawnie. Samoistne wyzwolenia = rzeczywisty upływ prądu w instalacji. Szukaj przyczyny, nie naprawiaj RCD","Problemem jest sieć – za dużo harmonicznych","To normalne w starych instalacjach"],ans:1,exp:"RCD który mierzy dobrze ale wyzwala samoistnie – robi swoją robotę. Sumujące się prądy upływu (filtry EMC, kondensatory, długie kable) lub uszkodzenie izolacji powodują przekroczenie 30mA. Wymiana na 100mA 'rozwiąże' objaw ale zostawi zagrożenie.",nc:"OG001",nw:"RCD004"},
+  {id:"RCD006",cat:"rcd",diff:2,scenario:"Instalujesz RCD 300mA (typ A) jako ochronę pożarową. Klient pyta dlaczego nie 30mA. Jak tłumaczysz?",opts:["300mA to tańsze rozwiązanie","30mA chroni przed porażeniem. 300mA to ochrona pożarowa – wykrywa upływ mogący powodować pożar. Stosuje się je razem","Różnica tylko w cenie","300mA to błąd – zawsze 30mA"],ans:1,exp:"Hierarchia RCD: 300mA (selektywny) na wejściu = ochrona pożarowa. 30mA obwody końcowe = ochrona przed porażeniem. Koordynacja: 30mA zadziała szybciej, 300mA jako backup. To nie alternatywy – to uzupełniające poziomy ochrony.",nc:"RCD005",nw:"RCD004"},
+  {id:"RCD007",cat:"rcd",diff:3,scenario:"Po wymianie lodówki na inwerterową RCD zaczął wyzwalać co noc. Co diagnozujesz?",opts:["RCD uszkodzony – wymiana","Lodówka inwerterowa generuje prąd upływu DC. RCD typ A może być nadwrażliwy. Sprawdzam typ RCD – może wymagać wymiany na typ F","Problem z nocnym napięciem sieci","Wymieniam lodówkę na starszą wersję"],ans:1,exp:"Inwertery generują prądy upływu z komponentą DC pulsującą. RCD typ A obsługuje do 6mA DC. Gdy prąd DC nasyca transformator różnicowy, może być nadwrażliwy. Rozwiązanie: RCD typ F (urządzenia 1-fazowe z falownikami) lub typ B (przemysłowe 3-fazowe).",nc:"INT005",nw:"RCD004"},
+  {id:"OG001",cat:"oględziny",diff:1,scenario:"Przed pomiarami jakie oględziny musisz wykonać?",opts:["Żadnych – oględziny to dla elektryków","Sprawdzam tylko tablicę","Kompletność i oznakowanie instalacji, stan przewodów, tabliczek, obudów, uziemień","Fotografuję tablicę i przechodzę do pomiarów"],ans:2,exp:"Oględziny to pierwsza część badania. Bez nich pomiary mogą być nieprawidłowe. Wykryte uszkodzenia mechaniczne, brakujące pokrywy, nieoznakowane przewody – informacje krytyczne dla bezpieczeństwa pomiaru.",nc:"OG003",nw:"OG002"},
+  {id:"OG002",cat:"oględziny",diff:1,scenario:"Podczas oględzin widzisz przewód PEN przekrój 6mm² Cu w instalacji TN-C. Problem?",opts:["Nic – 6mm² PEN OK dla TN-C","Sprawdzam materiał – dla Al min. 10mm², dla Cu min. 10mm²","Dla TN-C wymagany PEN: Cu min. 10mm². 6mm² Cu to niezgodność","Przekrój PEN nie jest normowany"],ans:2,exp:"Norma PN-HD 60364-5-54 wymaga dla PEN: min. 10mm² Cu lub 16mm² Al. 6mm² Cu = niezgodność. Notujesz i opisujesz w protokole.",nc:"OG001",nw:"OG001"},
+  {id:"OG003",cat:"oględziny",diff:2,scenario:"Tablica: wyłączniki podpisane markerem, jeden bez opisu, brak schematu. Jak to wpływa na protokół?",opts:["Nie wpływa – pomiary i tak wykonuję","Odnotuję brak dokumentacji jako niezgodność. Nieoznakowane obwody ograniczają identyfikację – protokół zawiera tę uwagę","Odmawiam pomiarów","Sam opisuję obwody i tworzę schemat"],ans:1,exp:"Brak oznakowania to niezgodność z normą PN-HD 60364-5-51. Pomiary możesz wykonać, ale protokół odnotowuje: brak schematu, niekompletne oznakowanie, ograniczoną identyfikowalność. Nie tworzysz dokumentacji za inwestora.",nc:"OG005",nw:"OG004"},
+  {id:"OG004",cat:"oględziny",diff:1,scenario:"Co to jest stopień ochrony IP i czemu służy przy oględzinach?",opts:["Intelektual Property – oznaczenie producenta","International Protection – odporność obudowy na ciała stałe i wodę","Impedance Protection – parametr elektryczny","Nie istotny dla pomiarów"],ans:1,exp:"IP (IEC 60529): pierwsza cyfra = ochrona przed ciałami stałymi (0-6), druga = ochrona przed wodą (0-9). W łazience min. IP44, w strefach mokrych IP65. Oględziny weryfikują czy IP odpowiada lokalizacji.",nc:"OG003",nw:"OG003"},
+  {id:"OG005",cat:"oględziny",diff:3,scenario:"Wyłącznik C20, przewód YDY 3×1,5mm². Co to oznacza?",opts:["To normalne – C20 chroni kabel 1,5mm²","Niezgodność krytyczna: C20 na kablu 1,5mm² niedopuszczalne. Obciążalność 1,5mm² to max 16A. C20 nie ochroni kabla przed przeciążeniem","Wpisuję uwagę i kontynuuję","Problem montera, nie pomiarowca"],ans:1,exp:"Kabel 1,5mm² YDY: obciążalność ok. 16A. Wyłącznik C20 wyzwala przy przeciążeniu dopiero >20A – kabel pracuje w warunkach niedopuszczalnych zanim wyłącznik zadziała. Poważna niezgodność bezpieczeństwa pożarowego.",nc:"PR001",nw:"OG004"},
+  {id:"OG006",cat:"oględziny",diff:2,scenario:"Badasz łazienkę. Widzisz gniazdo 230V w odległości 60cm od wanny (strefa 1). Co wpisujesz?",opts:["Wynik pozytywny – gniazdo działa","Niezgodność: gniazda 230V niedozwolone w strefie 1. Dozwolone tylko gniazda transformatorowe 12V lub SELV","Wynik negatywny tylko jeśli brak IP","To decyzja klienta"],ans:1,exp:"Norma PN-HD 60364-7-701: strefa 1 (do 60cm od wanny) – gniazda 230V niedozwolone (wyjątek: specjalne gniazda transformatorowe do golarek). Strefa 2 (60-120cm) – gniazda z RCBO dozwolone.",nc:"OG003",nw:"OG004"},
+  {id:"OG007",cat:"oględziny",diff:2,scenario:"Przewód PEN jest w kolorze niebieskim (jak przewód N). Czy to problem?",opts:["Tak – PEN powinien być żółto-zielony","PEN musi być oznaczony specjalnie (żółto-zielone pasy z niebieskim końcem lub niebieski z żółto-zielonymi końcówkami). Czysty niebieski = N – operator może pomylić","Nie – niebieski to właśnie PEN","Kolor przewodów to preferencja instalatora"],ans:1,exp:"Przewód PEN: oznakowanie HD 308 – żółto-zielony z niebieskimi końcami lub niebieski z żółto-zielonymi końcami. Czysto niebieski = N. Pomylenie PEN z N może skutkować śmiertelnym wypadkiem podczas serwisu.",nc:"OG005",nw:"OG004"},
+  {id:"PR001",cat:"protokoly",diff:1,scenario:"Klient prosi o wpisanie 'pozytywny' mimo wynik negatywny w jednym obwodzie. Mówi że 'zaraz to poprawi'. Jak reagujesz?",opts:["Zgadzam się – jak poprawi, będzie pozytywny","Odmawiam. Protokół opisuje stan z dnia badania. Proponuję ponowne badanie po naprawie","Wpisuję 'warunkowo pozytywny'","Wpisuję negatywny tylko dla tego obwodu"],ans:1,exp:"Protokół to dokument techniczny o wartości prawnej. Fałszerstwo dokumentu to przestępstwo. Proponujesz: teraz wpisujesz stan faktyczny, po naprawie wracasz i wystawiasz nowy protokół. Twój podpis = twoja odpowiedzialność.",nc:"PR003",nw:"PR002"},
+  {id:"PR002",cat:"protokoly",diff:1,scenario:"Które elementy są obowiązkowe w protokole z badania instalacji?",opts:["Tylko wyniki pomiarów","Dane obiektu, data, dane pomiarowca z SEP, wyniki, warunki środowiskowe, ocena końcowa","Wyniki i podpis","Wyniki, zdjęcia i certyfikat przyrządu"],ans:1,exp:"Pełny protokół wg PN-HD 60364-6: dane identyfikacyjne obiektu, zakres badania, warunki środowiskowe (temperatura, wilgotność), dane przyrządów (nr świadectwa wzorcowania), wyniki z jednostkami, ocena zgodności, podpis i numer SEP.",nc:"PR001",nw:"PR001"},
+  {id:"PR003",cat:"protokoly",diff:2,scenario:"Wzorcowanie przyrządu wygasło 3 miesiące temu. Klient nalega na pomiar. Co robisz?",opts:["Wykonuję pomiar – przyrząd nadal działa dobrze","Odmawiam. Wyniki bez aktualnego wzorcowania nie mają wartości metrologicznej. Protokół byłby nieważny","Wykonuję z adnotacją 'wzorcowanie nieaktualne'","To problem klienta"],ans:1,exp:"Wyniki z przyrządu po terminie wzorcowania są formalnie bezwartościowe. Protokół może być zakwestionowany przez nadzór, ubezpieczyciela lub sąd. Twoje uprawnienia SEP też zagrożone. Odsyłasz do laboratorium.",nc:"PR005",nw:"PR004"},
+  {id:"PR004",cat:"protokoly",diff:1,scenario:"Co to jest świadectwo wzorcowania przyrządu pomiarowego?",opts:["Certyfikat CE producenta","Dokument potwierdzający że wyniki przyrządu mieszczą się w deklarowanej dokładności względem wzorców","Instrukcja obsługi po polsku","Gwarancja producenta"],ans:1,exp:"Świadectwo wzorcowania (kalibracji) z laboratorium akredytowanego potwierdza spójność pomiarową. Zawiera: wyniki porównania do wzorców, niepewność pomiaru, okres ważności. Bez tego wyniki nie mają wartości metrologicznej.",nc:"PR003",nw:"PR003"},
+  {id:"PR005",cat:"protokoly",diff:3,scenario:"Wykonałeś badanie rok temu. Właściciel chce użyć starego protokołu do odbioru budynku. Budynek nieużywany, nic nie zmieniano. Co mówisz?",opts:["Tak – nic się nie zmieniło","Nie. Protokół opisuje stan z dnia badania. Instalacja mogła się zdegradować nawet bez użycia. Do odbioru wymagane aktualne badanie","Zależy od prawa lokalnego","Tak, jeśli dołączy oświadczenie"],ans:1,exp:"Protokół ma datę. Instalacja może się zdegradować nawet bez użycia (korozja, zawilgocenie, gryzonie). Twój podpis pod starym protokołem = twoja odpowiedzialność za stan obecny. Odmawiasz.",nc:"INT001",nw:"PR004"},
+  {id:"PR006",cat:"protokoly",diff:2,scenario:"Badanie eksploatacyjne instalacji w fabryce. Kiedy wymagane jest kolejne?",opts:["Co 5 lat zawsze","Co rok zawsze","Zależy od klasyfikacji obiektu: zagrożone wybuchem/pożarem co rok, pozostałe co 5 lat","Badanie eksploatacyjne nie jest wymagane"],ans:2,exp:"Art. 62 Prawa Budowlanego: obiekty zagrożone wybuchem, pożarem – co rok. Pozostałe – co 5 lat. Pomiarowiec informuje klienta o terminie następnego badania – element profesjonalnej obsługi.",nc:"PR003",nw:"PR002"},
+  {id:"INT001",cat:"interpretacja_wynikow",diff:2,scenario:"Ri=85MΩ (OK), Zs=0,42Ω (OK), RCD OK, uziemienie 9,8Ω (OK). Ale klient mówi że co miesiąc wymienia bezpieczniki. Co szukasz?",opts:["Nic – wszystkie wyniki pozytywne","Szukam problemu z przeciążeniem: sprawdzam dobór zabezpieczeń do odbiorników, sumę obciążeń","To problem z jakością sieci","Wpisuję wynik pozytywny i kończę"],ans:1,exp:"Pomiary elektryczne weryfikują bezpieczeństwo izolacji i ochrony. Wypalające się bezpieczniki to sygnał przeciążenia – zupełnie inne zjawisko. Dobry pomiarowiec łączy wyniki z objawami eksploatacyjnymi. Pyta o obciążenia, sprawdza dobór.",nc:"INT003",nw:"INT002"},
+  {id:"INT002",cat:"interpretacja_wynikow",diff:1,scenario:"Co oznacza wynik 'pozytywny' w protokole z badania instalacji?",opts:["Instalacja jest nowa i nowoczesna","Badane parametry spełniają wymagania norm i przepisów obowiązujących w dniu badania","Instalacja jest bezpieczna na zawsze","Pomiarowiec gwarantuje sprawność instalacji"],ans:1,exp:"'Pozytywny' znaczy: badane parametry, w dniu badania, w warunkach pomiaru, spełniają kryteria normatywne. To nie gwarancja wiecznej sprawności ani pełnej oceny – tylko weryfikacja mierzonych parametrów względem norm.",nc:"INT001",nw:"INT001"},
+  {id:"INT003",cat:"interpretacja_wynikow",diff:3,scenario:"PV: Ri DC strony generatora: 0,5 MΩ. Wynik negatywny (min. 1 MΩ). Ale rano padał deszcz. Co robisz?",opts:["Wpisuję negatywny i kończę","Odnotowuję warunki (deszcz, wilgotność), powtarzam pomiar po wyschnięciu. Jeśli wynik się poprawia – zawilgocenie. Jeśli nie – uszkodzenie izolacji","Wpisuję pozytywny – to wina pogody","Odmawiam pomiaru przy złej pogodzie"],ans:1,exp:"Mokre panele, kondensacja = fałszywie zaniżony Ri. Protokół MUSI zawierać warunki. Trend: poprawa po wyschnięciu = problem środowiskowy. Brak poprawy = uszkodzenie. Decyzja wymaga wiedzy, nie tylko przyrządu.",nc:"KK001",nw:"INT002"},
+  {id:"INT004",cat:"interpretacja_wynikow",diff:2,scenario:"Sprawdzasz ciągłość PE. Przyrząd podaje 0,00 Ω. Wynik doskonały?",opts:["Tak – 0 Ω to idealna ciągłość","Niekoniecznie. 0,00 Ω może oznaczać zwarcie L-PE lub błąd przyrządu. Sprawdzam ręcznie i weryfikuję biegunowość","Wynik poza zakresem – przyrząd uszkodzony","Zapisuję 0,00 Ω jako wynik pozytywny"],ans:1,exp:"0,00 Ω może być prawdziwy (bardzo krótki kabel) lub fałszywy (zwarte żyły, zwarcie do obudowy). Przed zapisaniem: czy trasa kabla sensowna, czy inne wyniki spójne. Anomalnie dobre wyniki wymagają weryfikacji tak samo jak złe.",nc:"INT001",nw:"INT002"},
+  {id:"INT005",cat:"interpretacja_wynikow",diff:3,scenario:"Wszystkie wyniki pozytywne (PE, Ri, Zs, RCD). Ale nowy RCD wyzwala przy włączeniu pralki. Przyczyna?",opts:["RCD uszkodzony – wymiana","Prąd rozruchowy + prądy upływu filtru EMC pralki przekraczają 30mA. Rozwiązanie: RCD typ A zamiast AC, lub RCD z opóźnieniem","Problem z siecią","Wyniki pozytywne – problem po stronie pralki"],ans:1,exp:"Nowoczesne pralki mają falowniki DC i filtry EMC z komponentą stałoprądową. RCD typ AC nie reaguje prawidłowo na DC. RCD typ A obsługuje prądy sinusoidalne i pulsujące DC. Wiedza która pozwala rozwiązać problem zamiast wymieniać sprawne urządzenia.",nc:"KK001",nw:"RCD004"},
+  {id:"KK001",cat:"kontakt_z_klientem",diff:2,scenario:"Klient pyta: 'Panie, a ta instalacja jest bezpieczna?' Wyniki wszystkie pozytywne. Jak odpowiadasz?",opts:["Tak, jest bezpieczna","Nie wiem – jestem tylko pomiarowcem","Badane parametry spełniają wymagania norm. To nie jest tożsame z gwarancją bezpieczeństwa – zależy też od użytkowania i przeglądów","Tak, gwarantuję bezpieczeństwo"],ans:2,exp:"Pomiarowiec nie wystawia certyfikatu bezpieczeństwa. Twoja rola: wyniki są zgodne z normami. 'Bezpieczna' to ocena szeroka – zakres elektryka projektanta, inspektora nadzoru, użytkownika. Mówisz co zbadałeś, nie co zapewniasz.",nc:"KK003",nw:"KK002"},
+  {id:"KK002",cat:"kontakt_z_klientem",diff:1,scenario:"Jak wyjaśnić klientowi wynik 85 MΩ rezystancji izolacji?",opts:["Osiemdziesiąt pięć megaomów to dobry wynik","Izolacja przewodów jest w dobrym stanie – prąd nie 'ucieka'. To wynik znacznie powyżej wymaganego minimum","Wynik techniczny, nie ma potrzeby tłumaczyć","To liczba którą wpisuję w protokół"],ans:1,exp:"Komunikacja z klientem to część Twojej pracy. Klient nie musi znać megaomów – musi zrozumieć co to dla niego oznacza. 'Izolacja jest dobra – prąd nie ucieka' to precyzyjne i zrozumiałe tłumaczenie.",nc:"KK001",nw:"KK001"},
+  {id:"KK003",cat:"kontakt_z_klientem",diff:3,scenario:"Klient jest agresywny, nie zgadza się z wynikiem negatywnym i grozi skargą do UDT. Masz rację. Jak reagujesz?",opts:["Zmieniam wynik żeby uniknąć konfliktu","Wychodzę i nie wystawiam protokołu","Spokojnie wyjaśniam podstawę oceny (norma, artykuł), proponuję opinię drugiego pomiarowca lub rzeczoznawcy. Protokół bez zmian","Dzwonię na policję"],ans:2,exp:"Twój protokół oparty jest na faktach i normach. Wyjaśniasz metodycznie, nie emocjonalnie. Proponujesz niezależną weryfikację – profesjonalne i chroni ciebie. Zmiana wyniku pod presją = fałszerstwo dokumentu = utrata uprawnień SEP + odpowiedzialność karna.",nc:"PV001",nw:"KK002"},
+  {id:"KK004",cat:"kontakt_z_klientem",diff:2,scenario:"Po wydaniu protokołu negatywnego klient pyta: 'Ile czasu mam na naprawę?' Twoja odpowiedź?",opts:["Nie wiem – nie moja odpowiedzialność","14 dni – standard","Zależy od niezgodności: zagrożenia bezpośrednie – natychmiast. Niezgodności bez zagrożenia – według ustaleń z inwestorem i wymogów organu nadzoru","Rok masz na naprawę"],ans:2,exp:"Nie ma jednego terminu. Niezgodności krytyczne (zagrożenie życia) = wstrzymanie natychmiast. Niezgodności niegroźne = termin ustalony z inwestorem, określony przez organ nadzoru. Informujesz o randze niezgodności, nie ustalasz terminów za urząd.",nc:"KK003",nw:"KK002"},
+  {id:"PV001",cat:"uziemienia",diff:2,scenario:"Instalacja PV 10kWp. Uziemienie konstrukcji wsporczej: 5,2 Ω. Norma PV ≤10 Ω. Klient pyta czy wystarczy dla piorunochronu. Co mówisz?",opts:["Tak – 5,2 Ω spełnia normę PV","Ochrona odgromowa to oddzielna norma PN-EN 62305. Wymagania LPS mogą być inne. Przekierowuję do rzeczoznawcy LPS","Nie wiem – to nie mój zakres","Tak, uziemienie 5,2 Ω wystarczy do wszystkiego"],ans:1,exp:"Wymagania dla uziemień instalacji elektrycznych i uziemień LPS to różne normy. Instalacja PV: R ≤ 10 Ω (IEC 62548), ale LPS może wymagać znacznie mniej. Dobry pomiarowiec zna granicę swojej kompetencji.",nc:"PV003",nw:"PV002"},
+  {id:"PV002",cat:"rezystancja_izolacji",diff:1,scenario:"Jakie napięcie stosujemy do pomiaru Ri w instalacji PV DC o napięciu Voc = 600V?",opts:["500V DC","1000V DC","230V DC","To samo napięcie co instalacja: 600V DC"],ans:1,exp:"Dla instalacji DC > 500V stosujemy napięcie pomiarowe 1000V DC. Reguła: U_pomiar ≥ 2 × U_nominal. Przy 600V DC: 1000V właściwe.",nc:"PV001",nw:"PV001"},
+  {id:"PV003",cat:"interpretacja_wynikow",diff:3,scenario:"Falownik PV pokazuje błąd 'Ground Fault'. String 1: Ri = 0,4 MΩ, String 2: Ri = 85 MΩ. Co diagnozujesz?",opts:["Cała instalacja ma problem – wymień falownik","String 1 ma uszkodzoną izolację (0,4 MΩ << 1 MΩ). String 2 sprawny. Izoluję String 1, szukam konkretnego modułu metodą bisekcji","To błąd falownika – resetuję i czekam","Norma dla PV to 0,5 MΩ – wynik OK"],ans:1,exp:"Selektywna diagnostyka: najpierw string po stringu, potem moduł po module metodą bisekcji. String 1 ma wyraźne uszkodzenie. Praca na niezizolowanym stringu PV przy świetle dziennym jest niebezpieczna – napięcie DC stale obecne.",nc:"KK001",nw:"PV002"}
+];
 
-<p class="ok">
-Stabilność > pojedynczy odczyt
-</p>
-</section>
+const SCENARIOS = [
+  {id:"SC001",title:"Odbiór nowej instalacji mieszkaniowej",ctx:"Mieszkanie 62m², TN-C-S, tablica B25 + 8 obwodów, 2 RCD 30mA, uziemienie fundamentowe.",desc:"Deweloper zleca odbiór instalacji przed przekazaniem lokatorowi. Dokumentacja: projekt elektryczny, schemat tablicy. Masz 2 godziny.",dps:["Jaką kolejność badań przyjmiesz?","Ri obwodu kuchennego: 0,7 MΩ. Pozostałe >100 MΩ. Co robisz?","Ciągłość PE w łazience: brak (przewód odłączony za tynkiem). Co wpisujesz?","Deweloper prosi o 'warunkowy pozytywny' – zaraz naprawi. Twoja decyzja?"],insight:"Kolejność zawsze: oględziny → ciągłość PE → Ri → Zs → RCD. Każdy wynik negatywny = wynik negatywny całości. Ri 0,7 MΩ = wynik negatywny nawet jeśli inne obwody są OK."},
+  {id:"SC002",title:"Kontrola eksploatacyjna restauracji",ctx:"Instalacja 15-letnia, częściowo modernizowana, brak pełnej dokumentacji, urządzenia gastronomiczne.",desc:"Restauracja czynna 15 lat. Właściciel zgłasza problemy: co 2-3 miesiące iskrzenie przy ekspresie do kawy. Wymaga protokołu dla ubezpieczyciela.",dps:["Jak podejdziesz do braku dokumentacji?","Ri obwodu ekspresowego: 2,1 MΩ (OK). Ale wyłącznik B16 dla ekspresu 3,5kW (15,2A ciągłe). Co diagnozujesz?","Ubezpieczyciel pyta o 'stan instalacji'. Jak formułujesz odpowiedź?"],insight:"3,5kW / 230V = 15,2A ciągłe. B16 przy 15,2A = praca blisko granicy przeciążenia. To przyczyna iskrzenia, nie izolacja. Ri OK ≠ instalacja sprawna pod każdym względem."},
+  {id:"SC003",title:"Instalacja PV 8kWp – odbiór",ctx:"PV 8kWp, Voc stringu 450V, Isc = 9,8A, falownik 8kW 3-fazowy, 2 stringi po 10 modułów.",desc:"Nowa instalacja PV na domu jednorodzinnym. Odbiór wymagany przez dystrybutora.",dps:["Jakie pomiary są specyficzne dla instalacji PV DC?","Ri string 1: 35 MΩ, string 2: 0,3 MΩ. Jak diagnosujesz i co wpisujesz?","Polaryzacja DC stringu 2: odwrócona. Falownik zgłasza błąd. Co to oznacza?","Uziemienie konstrukcji wsporczej: 12 Ω. Norma PV: ≤10 Ω. Co rekomendujemy?"],insight:"Odwrócona polaryzacja przy modułach szeregowych = moduł zainstalowany odwrotnie lub uszkodzone połączenie. Napięcie OK, ale prąd przepłynie w złym kierunku przez ten moduł. String 2 Ri 0,3 MΩ << 1 MΩ = wynik negatywny, wymagana diagnostyka modułu po module."},
+  {id:"SC004",title:"Stara instalacja aluminiowa po wymianie tablicy",ctx:"Instalacja aluminiowa z lat 70., nowa tablica z wyłącznikami B.",desc:"Klient wymienił tablicę. Stara instalacja AL (aluminium). Klient chce protokół 'dla spokoju ducha'.",dps:["Jakie szczególne ryzyka niesie stara instalacja aluminiowa?","Ri obwodów: 3-8 MΩ (OK, ale niska dla instalacji bez obciążenia). Co to sygnalizuje?","Ciągłość PE: brak w dwóch gniazdach – instalacja 2-żyłowa (bez PE). Co wpisujesz?","Klient pyta: 'Czy mogę teraz podłączyć zmywarkę?' Jak odpowiadasz?"],insight:"Instalacja bez PE + RCD 30mA = dopuszczalna kompensacja ochrony (PN-HD 60364-4-41), ale zmywarka bez PE w wilgotnej kuchni to ryzyko rezydualne. Klient musi świadomie zdecydować mając pełną informację."},
+  {id:"SC005",title:"Diagnoza nieoczekiwanych wyzwoleń RCD – blok mieszkalny",ctx:"Budynek z lat 90., mieszane instalacje mieszkań, kotłownia gazowa z regulatorem elektronicznym, pralnie wspólne.",desc:"RCD główny 300mA wyzwala losowo, zwykle po godz. 21:00. Wspólnota mieszkaniowa zleca diagnozę.",dps:["Jak metodycznie szukasz przyczyny losowych wyzwoleń?","Mierzysz prądy upływu: pralnie 8mA, kotłownia 45mA, mieszkania suma 180mA. Co to oznacza?","Regulator kotłowni ma filtr EMC z dużymi kondensatorami Y. Co rekomendujemy?","Właściciele pytają: czy to niebezpieczne gdy RCD wyzwala?"],insight:"Prądy upływu sumują się na wspólnym RCD: 45mA + 180mA = 225mA. Wieczorem dochodzą zmywarki, ładowarki, i suma przekracza 300mA. Rozwiązanie: selektywny RCD S-300mA lub redukcja upływów przy kotłowni."},
+  {id:"SC006",title:"Warsztat samochodowy – strefa niebezpieczna",ctx:"Kanał inspekcyjny w warsztacie. Istniejące oświetlenie 230V na kanale.",desc:"Nowy właściciel chce zainstalować oświetlenie LED na kanale samochodowym.",dps:["Jakie zagrożenie identyfikujesz przy oświetleniu 230V w kanale?","Klient mówi 'zawsze tak było i nic się nie stało'. Jak reagujesz?","Co dokumentujesz w protokole dotyczącym stref Ex?","Czy możesz zainstalować nowe oświetlenie LED w kanale?"],insight:"Kanał samochodowy = strefa Ex (opary paliw). Wymagane oprawy ATEX. Standardowe oświetlenie 230V to niezgodność krytyczna – zagrożenie wybuchem. Nie instalujesz niczego w strefie Ex bez uprawnień Ex i sprzętu ATEX."},
+  {id:"SC007",title:"Odbiór po zalaniu piwnic",ctx:"Piwnica z rozdzielnicą, kablami, gniazdami. Woda opadła 2 tygodnie temu. Wizualnie wysuszone.",desc:"Po powodzi piwnica była zalana przez 3 dni. Ubezpieczyciel wymaga protokołu przed przywróceniem zasilania.",dps:["Jakie parametry są krytyczne po zalaniu?","Ri obwodów piwnicowych: 1,2-3,5 MΩ (OK). Co cię niepokoi?","Złączki zaciskowe były zalane. Wyglądają normalnie. Co robisz?","Ubezpieczyciel pyta przez telefon: 'Możemy włączyć zasilanie?' Co odpowiadasz?"],insight:"Po zalaniu: Ri może być OK teraz (sucho), ale wilgoć zostaje w izolacji i wraca. Złączki po zalaniu = wymiana bezwarunkowa (korozja, zanieczyszczenia elektrolityczne). Ubezpieczycielowi przez telefon: 'Odpowiem na piśmie po wydaniu protokołu.' Nigdy nie wydajesz opinii ustnej."},
+  {id:"SC008",title:"Diagnoza zdalnego wyniki – telekonferencja z technikiem",ctx:"Wyniki: L1-Ri=85MΩ, L2-Ri=0,4MΩ, L3-Ri=78MΩ. Zs: L1=0,38Ω, L2=0,42Ω, L3=0,39Ω. RCD: OK. Uziemienie: 4,2Ω.",desc:"Młody technik przesyła tabelę wyników z pomiaru instalacji 3-fazowej i pyta co myślisz.",dps:["Co natychmiast rzuca się w oczy w tych wynikach?","Technik pyta: 'L2 ma 0,4 MΩ, to prawie norma'. Jak reagujesz?","Jaką diagnostykę zlecisz technikowi na miejscu?","Czy technik może podpisać protokół z wynikiem pozytywnym dla L1 i L3 a negatywnym dla L2?"],insight:"L2-Ri=0,4MΩ = wynik negatywny. Nie 'prawie norma' – poniżej normy. Instalacja 3-fazowa: jedna niezgodność = cały wynik protokołu negatywny. Technik diagnozuje L2 metodą bisekcji: dzieli obwód na połowy, mierzy która połowa ma niższy Ri."}
+];
 
-<section>
-<h2>5. CO ZNISZCZY POMIAR</h2>
+// ════════════════════════════════════════════════════════════════════
+// ENGINE
+// ════════════════════════════════════════════════════════════════════
+const Engine = {
+  state: null,
+  catLabels: {
+    uziemienia:'Uziemienia', petla_zwarcia:'Pętla zwarcia', rcd:'RCD',
+    rezystancja_izolacji:'Rezystancja izolacji', oględziny:'Oględziny',
+    protokoly:'Protokoły', interpretacja_wynikow:'Interpretacja wyników',
+    kontakt_z_klientem:'Kontakt z klientem'
+  },
 
-<ul>
-<li>Sucha gleba / piasek</li>
-<li>Kamienisty grunt</li>
-<li>Zbyt mała odległość sond H</li>
-<li>Brak stabilizacji odczytu</li>
-<li>Rurociągi / inne uziomy w pobliżu</li>
-</ul>
-</section>
+  init(){
+    this.state = {
+      startedAt: Date.now(),
+      history: [],
+      catScores: {},
+      diff: 1,
+      consecCorrect: 0,
+      consecWrong: 0,
+      gaps: [],
+      answered: 0,
+      maxQ: 20
+    };
+    Object.keys(this.catLabels).forEach(c => {
+      this.state.catScores[c] = {correct:0,total:0,confSum:0,overConf:0,underConf:0};
+    });
+  },
 
-<section>
-<h2>6. TYPOWE BŁĘDY TERENOWE</h2>
+  pickQ(){
+    const used = new Set(this.state.history.map(h=>h.id));
+    const weak = this._weakestCat();
+    const s = this.state;
 
-<p class="warning">
-„Podpiąłem miernik i mam wynik”
-</p>
+    let pool = QUESTIONS.filter(q => !used.has(q.id) && Math.abs(q.diff - s.diff) <= 1);
 
-<p>
-To nie jest pomiar. To odczyt bez kontroli warunków.
-</p>
+    if(weak){
+      const catPool = pool.filter(q => q.cat === weak);
+      if(catPool.length > 0) pool = catPool;
+    }
+    if(pool.length === 0) pool = QUESTIONS.filter(q => !used.has(q.id));
+    if(pool.length === 0) return null;
 
-<ul>
-<li>brak odłączenia uziomu</li>
-<li>jedna lokalizacja sond</li>
-<li>brak weryfikacji kierunkowej</li>
-<li>ignorowanie gruntu</li>
-</ul>
-</section>
+    const q = pool[Math.floor(Math.random() * pool.length)];
+    s._qStart = Date.now();
+    return q;
+  },
 
-<section>
-<h2>7. INTERPRETACJA WYNIKÓW</h2>
+  _weakestCat(){
+    const sc = this.state.catScores;
+    let worst = null, worstR = 1;
+    Object.entries(sc).forEach(([c, d]) => {
+      if(d.total < 1) return;
+      const r = d.correct/d.total;
+      if(r < worstR){ worstR = r; worst = c; }
+    });
+    return worst;
+  },
 
-<ul>
-<li>Dom: ~10 Ω (typowo akceptowalne)</li>
-<li>Stacje: ~5 Ω</li>
-<li>Instalacje wyrównawcze: ~30 Ω (zależnie od projektu)</li>
-</ul>
+  submit(q, sel, conf){
+    const ok = sel === q.ans;
+    const s = this.state;
+    s.history.push({id:q.id, cat:q.cat, diff:q.diff, sel, correct:ok, conf});
 
-<p class="warning">
-Norma nie jest uniwersalna — zawsze zależy od systemu sieci i projektu.
-</p>
-</section>
+    const c = s.catScores[q.cat];
+    if(c){
+      c.total++; if(ok) c.correct++; c.confSum += conf;
+      if(!ok && conf===2){ c.overConf++; this._gap(q.cat,'overconfident',`Byłeś pewien, ale błąd: ${this.catLabels[q.cat]}`); }
+      if(ok && conf===0) c.underConf++;
+    }
 
-<section>
-<h2>8. ZASADA KOŃCOWA</h2>
+    if(ok){
+      s.consecCorrect++; s.consecWrong = 0;
+      if(s.consecCorrect >= 2 && s.diff < 4){ s.diff = Math.min(4, s.diff+1); s.consecCorrect = 0; }
+    } else {
+      s.consecWrong++; s.consecCorrect = 0;
+      if(s.consecWrong >= 2 && s.diff > 1){ s.diff = Math.max(1, s.diff-1); s.consecWrong = 0;
+        this._gap(q.cat,'repeated_error',`Wielokrotne błędy: ${this.catLabels[q.cat]}`); }
+    }
+    s.answered++;
+    return ok;
+  },
 
-<p class="ok">
-Dobry pomiarowiec nie pokazuje liczby.<br>
-Dobry pomiarowiec potrafi powiedzieć, czy ta liczba jest prawdziwa.
-</p>
-</section>
+  _gap(cat, type, msg){
+    if(!this.state.gaps.find(g=>g.cat===cat&&g.type===type))
+      this.state.gaps.push({cat, type, msg, at: this.state.answered});
+  },
 
+  shouldEnd(){ return this.state.answered >= this.state.maxQ; },
+
+  report(){
+    const s = this.state;
+    const total = s.history.length;
+    const correct = s.history.filter(h=>h.correct).length;
+    const acc = total>0 ? Math.round(correct/total*100) : 0;
+    const dur = Math.round((Date.now()-s.startedAt)/60000);
+
+    const catR = Object.entries(s.catScores).map(([cat,d])=>{
+      const a = d.total>0 ? Math.round(d.correct/d.total*100) : null;
+      return {cat, label:this.catLabels[cat], acc:a, total:d.total, correct:d.correct,
+        overConf:d.overConf, cal:this._cal(a, d.overConf, d.total)};
+    }).filter(r=>r.total>0).sort((a,b)=>(a.acc??100)-(b.acc??100));
+
+    const lvl = this._lvl(acc, catR);
+    const plan = this._plan(catR, s.gaps);
+
+    return {total, correct, acc, dur, lvl, catR, gaps:s.gaps, plan,
+      biggestGap: catR[0], strongest: catR[catR.length-1],
+      maxDiff: Math.max(...s.history.map(h=>h.diff||1))};
+  },
+
+  _lvl(acc, cats){
+    const weak = cats.filter(c=>(c.acc??100)<50).length;
+    if(acc>=85&&weak===0) return {code:'EXPERT',label:'Ekspert terenowy',color:'#10b981',icon:'🏆'};
+    if(acc>=70&&weak<=1) return {code:'ADVANCED',label:'Zaawansowany pomiarowiec',color:'#3b82f6',icon:'⚡'};
+    if(acc>=55) return {code:'INTERMEDIATE',label:'Rozwijający się pomiarowiec',color:'#f59e0b',icon:'📈'};
+    return {code:'FOUNDATION',label:'Fundamenty wymagają wzmocnienia',color:'#ef4444',icon:'🔧'};
+  },
+
+  _cal(acc, overConf, total){
+    if(total<2) return null;
+    if(overConf>=2) return {type:'danger',text:'Nadmierna pewność siebie'};
+    if(acc!==null&&acc<60) return {type:'warning',text:'Luka kompetencyjna'};
+    if(acc!==null&&acc>=80) return {type:'good',text:'Solidna wiedza'};
+    return null;
+  },
+
+  _plan(catR, gaps){
+    const plan = [];
+    const urgent = catR.filter(c=>c.acc!==null&&c.acc<50);
+    const improve = catR.filter(c=>c.acc!==null&&c.acc>=50&&c.acc<75);
+    const overC = catR.filter(c=>c.overConf>=1);
+
+    if(urgent.length>0) plan.push({pri:1,type:'urgent',
+      title:'Pilne uzupełnienie luk',
+      desc:`Kategorie wymagające natychmiastowej nauki: ${urgent.map(c=>c.label).join(', ')}`,
+      action:'Wróć do podstaw normatywnych. Minimum 10 ćwiczeń praktycznych w każdej kategorii.'});
+
+    if(overC.length>0) plan.push({pri:2,type:'confidence',
+      title:'Kalibracja pewności siebie',
+      desc:`W kategoriach ${overC.map(c=>c.label).join(', ')} Twoja pewność przewyższa rzeczywistą wiedzę`,
+      action:'To najgroźniejsza luka terenowa. Przeanalizuj błędne odpowiedzi i sprawdź przyjęte założenia.'});
+
+    if(improve.length>0) plan.push({pri:3,type:'improve',
+      title:'Obszary do doskonalenia',
+      desc:`Dobra podstawa, warto rozwinąć: ${improve.map(c=>c.label).join(', ')}`,
+      action:'Ćwicz scenariusze terenowe. Szukaj trudnych przypadków brzegowych.'});
+
+    if(plan.length===0) plan.push({pri:1,type:'excellence',
+      title:'Utrzymanie wysokiego poziomu',
+      desc:'Silna wiedza w badanych kategoriach',
+      action:'Regularnie weryfikuj aktualizacje norm. Mentoruj młodszych pomiarowców.'});
+
+    return plan;
+  }
+};
+
+// ════════════════════════════════════════════════════════════════════
+// APP CONTROLLER
+// ════════════════════════════════════════════════════════════════════
+const App = {
+  currentQ: null,
+  selectedOpt: null,
+  selectedConf: null,
+  submitted: false,
+  scenarioIdx: 0,
+  scenarioQueue: [],
+
+  start(){
+    Engine.init();
+    document.getElementById('screenIntro').classList.add('hidden');
+    document.getElementById('screenQuiz').classList.remove('hidden');
+    document.getElementById('topbarRight').style.display = 'flex';
+    this.nextQuestion();
+  },
+
+  nextQuestion(){
+    if(Engine.shouldEnd()){
+      this.startScenarios();
+      return;
+    }
+
+    const q = Engine.pickQ();
+    if(!q){ this.startScenarios(); return; }
+    this.currentQ = q;
+    this.selectedOpt = null;
+    this.selectedConf = null;
+    this.submitted = false;
+
+    this.updateTicker();
+    this.updateProgress();
+    this.renderQuestion(q);
+  },
+
+  renderQuestion(q){
+    const wrap = document.getElementById('questionWrap');
+    const letters = ['A','B','C','D'];
+    const diffLabel = ['','LVL 1','LVL 2','LVL 3','LVL 4'][q.diff];
+    const diffClass = ['','d1','d2','d3','d4'][q.diff];
+
+    wrap.innerHTML = `
+      <div class="q-card" id="qCard">
+        <div class="q-meta">
+          <span class="q-cat">${Engine.catLabels[q.cat]||q.cat}</span>
+          <span class="q-id">${q.id}</span>
+          <span class="diff-badge ${diffClass}">${diffLabel}</span>
+        </div>
+        <div class="q-scenario">${q.scenario}</div>
+
+        <div class="opts" id="optsList">
+          ${q.opts.map((o,i)=>`
+            <button class="opt" onclick="App.selectOpt(${i})" id="opt${i}">
+              <span class="opt-letter">${letters[i]}</span>
+              <span>${o}</span>
+            </button>`).join('')}
+        </div>
+
+        <div class="conf-wrap">
+          <div class="conf-label">Jak pewny jesteś tej odpowiedzi?</div>
+          <div class="conf-opts">
+            <button class="conf-btn" onclick="App.selectConf(0,this)" id="conf0">🎲<br>Zgadywałem</button>
+            <button class="conf-btn" onclick="App.selectConf(1,this)" id="conf1">🤔<br>Raczej wiem</button>
+            <button class="conf-btn" onclick="App.selectConf(2,this)" id="conf2">💪<br>Jestem pewien</button>
+          </div>
+        </div>
+
+        <button class="btn-submit" id="btnSubmit" onclick="App.submit()" disabled>Zatwierdź odpowiedź</button>
+      </div>
+    `;
+  },
+
+  selectOpt(i){
+    if(this.submitted) return;
+    this.selectedOpt = i;
+    document.querySelectorAll('.opt').forEach((b,j)=>{
+      b.style.borderColor = j===i ? 'var(--accent)' : '';
+      b.style.background = j===i ? 'rgba(240,165,0,0.08)' : '';
+    });
+    this._checkCanSubmit();
+  },
+
+  selectConf(v, btn){
+    if(this.submitted) return;
+    this.selectedConf = v;
+    document.querySelectorAll('.conf-btn').forEach(b=>{b.className='conf-btn';});
+    btn.classList.add(`a${v}`);
+    this._checkCanSubmit();
+  },
+
+  _checkCanSubmit(){
+    const btn = document.getElementById('btnSubmit');
+    if(btn) btn.disabled = this.selectedOpt===null || this.selectedConf===null;
+  },
+
+  submit(){
+    if(this.submitted || this.selectedOpt===null || this.selectedConf===null) return;
+    this.submitted = true;
+
+    const q = this.currentQ;
+    const ok = Engine.submit(q, this.selectedOpt, this.selectedConf);
+
+    // Color options
+    document.querySelectorAll('.opt').forEach((b,i)=>{
+      b.disabled = true;
+      b.style.borderColor = ''; b.style.background = '';
+      if(i===q.ans) b.classList.add('correct');
+      else if(i===this.selectedOpt && !ok) b.classList.add('sel-wrong');
+    });
+
+    // Show explanation
+    const card = document.getElementById('qCard');
+    const expl = document.createElement('div');
+    expl.className = 'expl';
+    expl.innerHTML = `
+      <div class="expl-hdr">
+        <span class="${ok?'ok':'nok'}">${ok?'✓ Poprawna odpowiedź':'✗ Błędna odpowiedź'}</span>
+        ${this.selectedConf===2&&!ok?'<span style="color:var(--yellow);font-size:12px">⚠️ Byłeś pewien – wykryto rozjazd</span>':''}
+      </div>
+      <div class="expl-txt">${q.exp}</div>
+      <button class="btn-next" onclick="App.nextQuestion()">
+        ${Engine.shouldEnd() ? '📊 Przejdź do scenariuszy terenowych' : 'Następne pytanie →'}
+      </button>
+    `;
+    card.appendChild(expl);
+    document.getElementById('btnSubmit').style.display = 'none';
+
+    // Check for new gaps
+    const gaps = Engine.state.gaps;
+    if(gaps.length > 0){
+      const latest = gaps[gaps.length-1];
+      const alert = document.getElementById('gapAlert');
+      alert.classList.remove('hidden');
+      document.getElementById('gapAlertMsg').textContent = latest.msg;
+    }
+
+    this.updateTicker();
+    document.getElementById('tGaps').textContent = Engine.state.gaps.length;
+  },
+
+  updateTicker(){
+    const h = Engine.state.history;
+    const total = h.length;
+    const correct = h.filter(x=>x.correct).length;
+    document.getElementById('tCorrect').textContent = correct;
+    document.getElementById('tTotal').textContent = total;
+    document.getElementById('tAccuracy').textContent = total>0 ? Math.round(correct/total*100)+'%' : '—';
+    document.getElementById('tGaps').textContent = Engine.state.gaps.length;
+  },
+
+  updateProgress(){
+    const pct = Math.round(Engine.state.answered / Engine.state.maxQ * 100);
+    document.getElementById('progressFill').style.width = pct+'%';
+    document.getElementById('progressLabel').textContent = `${Engine.state.answered}/${Engine.state.maxQ}`;
+    const d = Engine.state.diff;
+    const badge = document.getElementById('diffBadge');
+    badge.textContent = `LVL ${d}`;
+    badge.className = `diff-badge d${d}`;
+  },
+
+  // ── SCENARIOS ────────────────────────────────────────────────────
+  startScenarios(){
+    document.getElementById('screenQuiz').classList.add('hidden');
+    document.getElementById('screenScenarios').classList.remove('hidden');
+
+    // Pick 3 scenarios based on weakest categories
+    const weakCat = Engine._weakestCat();
+    const pool = [...SCENARIOS].sort(()=>Math.random()-0.5).slice(0,3);
+    this.scenarioQueue = pool;
+    this.scenarioIdx = 0;
+    document.getElementById('scIdx').textContent = 1;
+    this.renderScenario(pool[0]);
+  },
+
+  renderScenario(sc){
+    const wrap = document.getElementById('scenarioWrap');
+    const isLast = this.scenarioIdx >= this.scenarioQueue.length-1;
+
+    wrap.innerHTML = `
+      <div class="sc-card">
+        <div class="sc-label">Scenariusz terenowy ${this.scenarioIdx+1} z ${this.scenarioQueue.length}</div>
+        <div class="sc-title">${sc.title}</div>
+        <div class="sc-context">📋 Kontekst: ${sc.ctx}</div>
+        <div class="sc-desc">${sc.desc}</div>
+        <div class="dp-list">
+          <h3>Punkty decyzyjne – co zrobiłbyś?</h3>
+          ${sc.dps.map((dp,i)=>`<div class="dp"><strong>${i+1}.</strong> ${dp}</div>`).join('')}
+        </div>
+        <div class="key-insight"><strong>🎯 Kluczowy wniosek terenowy</strong>${sc.insight}</div>
+        ${isLast
+          ? `<button class="btn-sc-finish" onclick="App.showResults()">📊 Zobacz wyniki →</button>`
+          : `<button class="btn-sc-next" onclick="App.nextScenario()">Następny scenariusz →</button>`}
+      </div>
+    `;
+  },
+
+  nextScenario(){
+    this.scenarioIdx++;
+    document.getElementById('scIdx').textContent = this.scenarioIdx+1;
+    this.renderScenario(this.scenarioQueue[this.scenarioIdx]);
+    window.scrollTo(0,0);
+  },
+
+  // ── RESULTS ──────────────────────────────────────────────────────
+  showResults(){
+    document.getElementById('screenScenarios').classList.add('hidden');
+    document.getElementById('screenResults').classList.remove('hidden');
+    document.getElementById('topbarRight').style.display = 'none';
+    window.scrollTo(0,0);
+
+    const report = Engine.report();
+    const container = document.getElementById('resultsContent');
+    this.renderResults(report, container);
+  },
+
+  renderResults(r, el){
+    const lvl = r.lvl;
+    el.innerHTML = `
+      <!-- HEADER -->
+      <div class="res-header">
+        <div class="res-badge">
+          <div class="res-icon">${lvl.icon}</div>
+          <div>
+            <div class="res-level" style="color:${lvl.color}">${lvl.label}</div>
+            <div class="res-score">${r.acc}% poprawnych odpowiedzi</div>
+          </div>
+        </div>
+        <div class="res-meta">
+          <span>📋 ${r.total} pytań</span>
+          <span>✓ ${r.correct} poprawnych</span>
+          <span>⏱ ${r.dur} min</span>
+          <span>🎯 Max trudność: ${r.maxDiff}/4</span>
+          ${r.gaps.length>0?`<span>⚠️ ${r.gaps.length} luk wykrytych</span>`:''}
+        </div>
+      </div>
+
+      <!-- COMPETENCY MAP -->
+      <div class="section">
+        <div class="sec-title">Mapa kompetencji</div>
+        <div class="comp-grid">
+          ${r.catR.map(c=>`
+            <div class="comp-row">
+              <div class="comp-top">
+                <span class="comp-name">${c.label}</span>
+                ${c.cal?`<span class="cal-badge cal-${c.cal.type}">${c.cal.text}</span>`:''}
+              </div>
+              <div class="comp-track">
+                <div class="comp-fill" style="width:${c.acc??0}%;background:${this._pctColor(c.acc??0)}"></div>
+                <span class="comp-pct">${c.acc??'—'}%</span>
+              </div>
+              <div class="comp-detail">${c.correct}/${c.total} poprawnych${c.overConf>0?` · ⚠️ ${c.overConf}× pewny+błąd`:''}</div>
+            </div>`).join('')}
+        </div>
+        ${r.catR.length>=3?this._buildRadar(r.catR):''}
+      </div>
+
+      <!-- GAPS -->
+      ${r.gaps.length>0?`
+      <div class="section gap-sec">
+        <div class="sec-title">⚠️ Wykryte luki kompetencyjne</div>
+        ${r.gaps.map(g=>`
+          <div class="gap-item gap-${g.type}">
+            <strong>${g.msg}</strong>
+            <span class="gap-when">wykryto po ${g.at} pytaniach</span>
+          </div>`).join('')}
+        ${r.biggestGap&&r.biggestGap.acc!==null?`
+          <div class="biggest-gap">
+            <span class="gap-label-t">Największa luka:</span>
+            <strong>${r.biggestGap.label}</strong>
+            <span class="gap-score-t">${r.biggestGap.acc}%</span>
+          </div>`:''}
+      </div>`:''}
+
+      <!-- LEARNING PLAN -->
+      <div class="section">
+        <div class="sec-title">Rekomendowany plan nauki</div>
+        ${r.plan.map(p=>`
+          <div class="plan-card plan-${p.type}">
+            <div class="plan-hdr">
+              <span class="plan-pri">Priorytet ${p.pri}</span>
+              <strong class="plan-title">${p.title}</strong>
+            </div>
+            <p class="plan-desc">${p.desc}</p>
+            <div class="plan-action">→ ${p.action}</div>
+          </div>`).join('')}
+      </div>
+
+      <!-- STATS -->
+      <div class="section">
+        <div class="sec-title">Statystyki sesji</div>
+        <div class="stats-grid">
+          <div class="stat-box"><div class="stat-num">${r.total}</div><div class="stat-lbl">pytań</div></div>
+          <div class="stat-box"><div class="stat-num">${r.correct}</div><div class="stat-lbl">poprawnych</div></div>
+          <div class="stat-box"><div class="stat-num">${r.acc}%</div><div class="stat-lbl">skuteczność</div></div>
+          <div class="stat-box"><div class="stat-num">${r.dur}</div><div class="stat-lbl">minut</div></div>
+          <div class="stat-box"><div class="stat-num">${r.maxDiff}/4</div><div class="stat-lbl">max trudność</div></div>
+          <div class="stat-box"><div class="stat-num">${r.gaps.length}</div><div class="stat-lbl">luki</div></div>
+        </div>
+      </div>
+    `;
+
+    // Animate bars after render
+    setTimeout(()=>{
+      document.querySelectorAll('.comp-fill').forEach(b=>{
+        const w = b.style.width; b.style.width='0'; setTimeout(()=>b.style.width=w, 50);
+      });
+    }, 100);
+  },
+
+  _buildRadar(cats){
+    const size = 240, cx = 120, cy = 120, r = 92;
+    const n = cats.length;
+    const step = (2*Math.PI)/n;
+
+    const pts = (scale) => cats.map((_,i)=>{
+      const a = i*step - Math.PI/2;
+      return [cx+scale*r*Math.cos(a), cy+scale*r*Math.sin(a)];
+    });
+
+    const path = (points) => points.map((p,i)=>`${i===0?'M':'L'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ')+'Z';
+
+    const grids = [.25,.5,.75,1].map(s=>`<path d="${path(pts(s))}" class="r-grid"/>`).join('');
+    const axes = pts(1).map(([x,y])=>`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" class="r-axis"/>`).join('');
+
+    const dataP = cats.map((c,i)=>{
+      const a = i*step - Math.PI/2;
+      const s = (c.acc??0)/100;
+      return [cx+s*r*Math.cos(a), cy+s*r*Math.sin(a)];
+    });
+
+    const labels = cats.map((c,i)=>{
+      const a = i*step - Math.PI/2;
+      const lx = cx+(r+24)*Math.cos(a);
+      const ly = cy+(r+24)*Math.sin(a);
+      return `<text x="${lx.toFixed(1)}" y="${(ly+3).toFixed(1)}" class="r-label" text-anchor="middle">${c.label.split(' ')[0]}</text>`;
+    }).join('');
+
+    const dots = dataP.map(([x,y])=>`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" class="r-dot"/>`).join('');
+
+    return `<div class="radar-wrap"><svg viewBox="0 0 ${size} ${size}" class="radar-svg">${grids}${axes}<path d="${path(dataP)}" class="r-data"/>${dots}${labels}</svg></div>`;
+  },
+
+  _pctColor(pct){
+    if(pct>=80) return '#10b981';
+    if(pct>=60) return '#3b82f6';
+    if(pct>=40) return '#f59e0b';
+    return '#ef4444';
+  },
+
+  restart(){
+    document.getElementById('screenResults').classList.add('hidden');
+    document.getElementById('screenIntro').classList.remove('hidden');
+    document.getElementById('topbarRight').style.display = 'none';
+    document.getElementById('gapAlert').classList.add('hidden');
+    window.scrollTo(0,0);
+  }
+};
+</script>
 </body>
 </html>
